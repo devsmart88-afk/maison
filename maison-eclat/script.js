@@ -1,0 +1,9 @@
+const $ = (s, e=document) => e.querySelector(s);
+const dialog = $('#booking'), form = $('#booking-form'), service = $('[name=service]');
+const date = $('[name=date]'); date.min = new Date().toISOString().split('T')[0];
+document.querySelectorAll('.book-trigger').forEach(button => button.addEventListener('click', () => { if(button.dataset.service) service.value = button.dataset.service; dialog.showModal(); $('[name=name]').focus(); }));
+$('.close').addEventListener('click', () => dialog.close()); $('.close-success').addEventListener('click', () => { dialog.close(); $('#success-panel').hidden=true; $('#form-panel').hidden=false; });
+dialog.addEventListener('click', e => { if(e.target === dialog) dialog.close(); });
+form.addEventListener('submit', e => { e.preventDefault(); if(!form.reportValidity()) return; const data = new FormData(form); $('#confirmation').textContent = `We’ve prepared a demo request for ${data.get('service')} on ${data.get('date')} at ${data.get('time')}. In a live version, this would be sent to the salon.`; $('#form-panel').hidden=true; $('#success-panel').hidden=false; form.reset(); });
+const menu = $('.menu-btn'), nav = $('nav'); menu.addEventListener('click', () => { const open = nav.classList.toggle('open'); menu.setAttribute('aria-expanded', open); menu.textContent = open ? '×' : '☰'; }); document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>nav.classList.remove('open')));
+const lightbox = $('.lightbox'), lightImg = $('.lightbox img'); document.querySelectorAll('.masonry img').forEach(img=>img.addEventListener('click',()=>{lightImg.src=img.src;lightImg.alt=img.alt;lightbox.hidden=false;})); $('.lightbox button').addEventListener('click',()=>lightbox.hidden=true); document.addEventListener('keydown',e=>{if(e.key==='Escape') lightbox.hidden=true;});
